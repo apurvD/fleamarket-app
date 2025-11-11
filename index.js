@@ -26,8 +26,26 @@ db.connect((err) => {
 });
 
 // Routes
-app.get('/api/vendor', (req, res) => {
-  db.query('SELECT * FROM vendor', (err, results) => {
+var routes = express.Router();
+app.use('/api', routes);
+
+routes.get('/', (req, res) => {
+  res.send('Welcome to the DB Market API');
+});
+
+routes.get('/vendor', (req, res) => {
+  db.query(`SELECT * FROM vendor`, (err, results) => {
+    if (err) {
+      console.error('Error executing query: ' + err.stack);
+      res.status(500).send('Error fetching vendors');
+      return;
+    }
+    res.json(results);
+  });
+});
+
+app.get('/vendor/:vid', (req, res) => {
+  db.query(`SELECT * FROM vendor where id = ${req.params["vid"]}`, (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
       res.status(500).send('Error fetching vendors');
