@@ -4,8 +4,10 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 // Middleware
 app.use(bodyParser.json());
+
 // MySQL Connection
 const db = mysql.createConnection({
   host: 'localhost',
@@ -13,6 +15,7 @@ const db = mysql.createConnection({
   password: 'rootpass',
   database: 'db'
 });
+
 // Connect to MySQL
 db.connect((err) => {
   if (err) {
@@ -21,17 +24,19 @@ db.connect((err) => {
   }
   console.log('Connected to MySQL as ID ' + db.threadId);
 });
+
 // Routes
-app.get('/api/users', (req, res) => {
-  db.query('SELECT * FROM users', (err, results) => {
+app.get('/api/vendors', (req, res) => {
+  db.query('SELECT * FROM vendors', (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
-      res.status(500).send('Error fetching users');
+      res.status(500).send('Error fetching vendors');
       return;
     }
     res.json(results);
   });
 });
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
