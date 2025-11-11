@@ -4,6 +4,7 @@ services:
   mysql:
     image: mysql:latest
     container_name: mysql-container
+    command: --lower_case_table_names=1
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
       # uncomment below if you want to automatically create and select a database

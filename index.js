@@ -26,8 +26,8 @@ db.connect((err) => {
 });
 
 // Routes
-app.get('/api/vendors', (req, res) => {
-  db.query('SELECT * FROM vendors', (err, results) => {
+app.get('/api/vendor', (req, res) => {
+  db.query('SELECT * FROM vendor', (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
       res.status(500).send('Error fetching vendors');
