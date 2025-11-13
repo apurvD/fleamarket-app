@@ -55,7 +55,7 @@ routes.get('/vendor/:vid', (req, res) => {
   });
 });
 
-app.get('/vendor/:vid/product', (req, res) => {
+routes.get('/vendor/:vid/product', (req, res) => {
   db.query(`SELECT * FROM product where vid = ${req.params["vid"]}`, (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
@@ -66,8 +66,8 @@ app.get('/vendor/:vid/product', (req, res) => {
   });
 });
 
-app.get('/vendor/:vid/sale', (req, res) => {
-  db.query(`SELECT DISTINCT s.* FROM sale s JOIN saleitem si ON si.sid = s.id JOIN product ON si.pid = p.id where p.vid = ${req.params["vid"]}`, (err, results) => {
+routes.get('/vendor/:vid/sale', (req, res) => {
+  db.query(`SELECT DISTINCT s.* FROM sale s JOIN saleitem si ON si.sid = s.id JOIN product p ON si.pid = p.id where p.vid = ${req.params["vid"]}`, (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
       res.status(500).send('Error fetching sales');
@@ -77,7 +77,7 @@ app.get('/vendor/:vid/sale', (req, res) => {
   });
 });
 
-app.get('/sale/:sid', (req, res) => {
+routes.get('/sale/:sid', (req, res) => {
   db.query(`SELECT * FROM sale s where id = ${req.params["sid"]}`, (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
@@ -88,7 +88,7 @@ app.get('/sale/:sid', (req, res) => {
   });
 });
 
-app.get('/sale/:sid/item', (req, res) => {
+routes.get('/sale/:sid/item', (req, res) => {
   db.query(`SELECT * FROM saleitem where sid = ${req.params["sid"]}`, (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
@@ -99,7 +99,7 @@ app.get('/sale/:sid/item', (req, res) => {
   });
 });
 
-app.get('/sale/:sid/product', (req, res) => {
+routes.get('/sale/:sid/product', (req, res) => {
   db.query(`SELECT * FROM saleitem si JOIN product p ON si.pid = p.id where si.sid = ${req.params["sid"]}`, (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
@@ -110,7 +110,7 @@ app.get('/sale/:sid/product', (req, res) => {
   });
 });
 
-app.get('/sale/:sid/vendor', (req, res) => {
+routes.get('/sale/:sid/vendor', (req, res) => {
   db.query(`SELECT DISTINCT v.* FROM saleitem si JOIN product p ON si.pid = p.id JOIN vendor v ON p.vid = v.id where si.sid = ${req.params["sid"]}`, (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
@@ -121,7 +121,7 @@ app.get('/sale/:sid/vendor', (req, res) => {
   });
 });
 
-app.get('/product/:pid', (req, res) => {
+routes.get('/product/:pid', (req, res) => {
   db.query(`SELECT * FROM product where id = ${req.params["pid"]}`, (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
@@ -132,7 +132,7 @@ app.get('/product/:pid', (req, res) => {
   });
 });
 
-app.get('/product/:pid/item', (req, res) => {
+routes.get('/product/:pid/item', (req, res) => {
   db.query(`SELECT * FROM saleitem where pid = ${req.params["pid"]}`, (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
@@ -154,7 +154,7 @@ routes.get('/booth', (req, res) => {
   });
 });
 
-app.get('/booth/:bid', (req, res) => {
+routes.get('/booth/:bid', (req, res) => {
   db.query(`SELECT * FROM booth where id = ${req.params["bid"]}`, (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
@@ -165,7 +165,7 @@ app.get('/booth/:bid', (req, res) => {
   });
 });
 
-app.get('/booth/:bid/reservation', (req, res) => {
+routes.get('/booth/:bid/reservation', (req, res) => {
   db.query(`SELECT * FROM reservation where bid = ${req.params["bid"]}`, (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
