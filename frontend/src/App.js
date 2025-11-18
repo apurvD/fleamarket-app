@@ -1,17 +1,28 @@
-import './App.css';
-import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Home from "./pages/Home";
+import VendorList from "./pages/VendorList";
+import VendorLogin from "./pages/VendorLogin";
+import VendorDetails from "./pages/VendorDetails";
+import VendorStats from "./pages/VendorStats";
+import ProductDetails from "./pages/ProductDetails";
+import BoothList from "./pages/BoothList";
+import VendorReservation from "./pages/VendorReservation";
 
 function App() {
   return (
-    <div style={{ 
-      fontFamily: "Arial, sans-serif", 
-      padding: "40px", 
-      textAlign: "center" 
-    }}>
-      <h1>DB Market Project</h1>
-      <p>Welcome! Your React frontend is running successfully.</p>
-      <p>Backend is running on Docker.</p>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/vendors" element={<VendorList />} />
+        <Route path="/login" element={<VendorLogin />} />
+        <Route path="/vendor/:id" element={<VendorDetails />} />
+        <Route path="/stats" element={<VendorStats />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/booths" element={<BoothList />} />
+        <Route path="/reserve" element={<VendorReservation />} />
+      </Routes>
+    </Router>
   );
 }
 
