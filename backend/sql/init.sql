@@ -9,6 +9,16 @@ CREATE TABLE Vendor (
     logo BLOB
 );
 
+CREATE TABLE IF NOT EXISTS vendor_auth (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    vendor_id INT NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (vendor_id) REFERENCES vendor(id)
+);
+
 CREATE TABLE Product (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,

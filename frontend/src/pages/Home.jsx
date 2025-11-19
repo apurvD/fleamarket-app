@@ -1,0 +1,143 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+export default function Home() {
+  const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(12);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [page, limit]);
+
+  const fetchProducts = async () => {
+    try {
+      // fetch paginated products from the API endpoint
+      const res = await fetch(`http://localhost:3000/api/product?page=${page}&limit=${limit}`);
+      const data = await res.json();
+      // server returns { products, total }
+      setProducts(data.products || []);
+      setTotal(data.total || 0);
+    } catch (error) {
+      console.log("Error fetching products:", error);
+    }
+  };
+
+  const filtered = products.filter(p =>
+    p.name?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      {/* ---------------- HEADER ---------------- */}
+      <div className="text-center mt-10">
+        <h2 className="text-2xl font-semibold">
+          Buy & Sell Pre-Owned Items Easily
+        </h2>
+      </div>
+
+
+      {/* ---------------- SEARCH BAR ---------------- */}
+      <div className="flex justify-center mt-6">
+        <div className="flex items-center w-1/2 bg-white shadow rounded-full px-4 py-2">
+          <input
+            type="text"
+            placeholder="Search for a Product"
+            className="flex-1 outline-none"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <span className="text-gray-500 text-xl">&#128269;</span>
+        </div>
+      </div>
+
+
+      {/* ---------------- PRODUCT LIST ---------------- */}
+      <div className="mt-10 px-10">
+        <h3 className="text-center text-xl font-semibold mb-6">Listing of Products</h3>
+
+        {/* Pagination controls */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={page <= 1}
+              className="px-3 py-1 bg-white border rounded disabled:opacity-50"
+            >
+              Prev
+            </button>
+
+            <span className="px-2">Page {page} of {totalPages}</span>
+
+            <button
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              disabled={page >= totalPages}
+              className="px-3 py-1 bg-white border rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <label className="text-sm">Per page:</label>
+            <select
+              value={limit}
+              onChange={(e) => { setLimit(Number(e.target.value)); setPage(1); }}
+              className="border rounded px-2 py-1"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={15}>15</option>
+              <option value={20}>20</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          {filtered.map((p) => (
+            <div
+              key={p.id}
+              className="bg-white p-4 rounded-xl shadow hover:shadow-lg transition"
+            >
+              <h4 className="font-semibold text-lg">{p.name}</h4>
+              <div className="mt-2">
+                <p> Image</p>
+                <p> Price: ${p.price}</p>
+                <p>Qty: {p.qty}</p>
+              </div>
+
+              <Link
+                to={`/vendor/${p.vid}`}
+                className="block mt-4 text-center bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+              >
+                Vendor Details
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
+
+
+      {/* ---------------- FOOTER BUTTONS ---------------- */}
+      <div className="flex justify-center space-x-10 mt-16 mb-10">
+        <button className="px-6 py-2 bg-blue-400 text-white rounded-lg">
+          Browse Next Events
+        </button>
+        <button className="px-6 py-2 bg-blue-400 text-white rounded-lg">
+          Contact a Vendor
+        </button>
+        <button className="px-6 py-2 bg-blue-400 text-white rounded-lg">
+          Need Help
+        </button>
+      </div>
+
+      <footer className="text-center text-sm text-gray-600 pb-4">
+        © Virginia Tech CS 5614
+      </footer>
+    </div>
+  );
+}
