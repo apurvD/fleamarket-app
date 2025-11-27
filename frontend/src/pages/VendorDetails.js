@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 export default function VendorDetails() {
+    const navigate = useNavigate();
+    
+    const loggedInVendor = JSON.parse(localStorage.getItem('vendor'));
+    const loggedInVendorId = loggedInVendor ? loggedInVendor.vendor_id : null;
+
+    const handleLogout = () => {
+        localStorage.removeItem('vendor'); // remove login info from local storage
+        window.dispatchEvent(new Event("storage"));  // auto-updates navbar
+        navigate('/login');          // redirect to login page
+    };
+
     const { id } = useParams(); // Get vendor ID from URL
     const [vendor, setVendor] = useState(null);
     const [products, setProducts] = useState([]);
@@ -67,6 +78,16 @@ export default function VendorDetails() {
                     <h1 className="text-3xl font-bold text-gray-900">Vendor Details</h1>
                     <p className="text-gray-600 mt-1">View vendor information and product inventory</p>
                 </div>
+
+
+                {loggedInVendorId && loggedInVendorId.toString() === id.toString() && (
+                    <button
+                        onClick={handleLogout}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                    >
+                        Logout
+                    </button>
+                )}
 
                 {/* Vendor Information Card */}
                 <div className="bg-white rounded-lg shadow-sm p-6 mb-6">

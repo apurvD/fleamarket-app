@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {Link,  useNavigate } from "react-router-dom";
 
 export default function VendorLogin() {
@@ -6,6 +6,14 @@ export default function VendorLogin() {
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const vendor = localStorage.getItem("vendor");
+    if (vendor) {
+      const { vendor_id } = JSON.parse(vendor);
+      navigate(`/vendor/${vendor_id}`);
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,6 +27,8 @@ export default function VendorLogin() {
     const data = await response.json();
 
     if (response.ok) {
+      localStorage.setItem("vendor", JSON.stringify(data));   // save login to local storage
+      window.dispatchEvent(new Event("storage"));  // auto-updates navbar
       navigate(`/vendor/${data.vendor_id}`);
     } else {
       setMsg(data.error);
