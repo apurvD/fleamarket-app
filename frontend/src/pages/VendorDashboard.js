@@ -8,8 +8,8 @@ export default function VendorDashboard() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const vendor = JSON.parse(localStorage.getItem("vendor"));
-    const vendorId = vendor?.id || 1;
+    const stored = JSON.parse(localStorage.getItem("vendor"));
+    const vendorId = stored?.vendor?.id || stored?.vendor_id;
 
     useEffect(() => {
         fetchDashboardData();

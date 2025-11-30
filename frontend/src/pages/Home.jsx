@@ -112,7 +112,7 @@ export default function Home() {
                       <div className="mt-2">
                           <p> Image</p>
                           <p> Price: ${p.price}</p>
-                          <p>Qty: {p.count || p.qty || 0}</p>
+                          <p>Qty: {p.count || 0}</p>
                       </div>
 
                       <div className="flex flex-col space-y-2 mt-4">
