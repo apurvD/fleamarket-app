@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { Link } from 'react-router-dom';
 export default function VendorDashboard() {
     const [stats, setStats] = useState(null);
     const [recentSales, setRecentSales] = useState([]);
@@ -72,8 +72,14 @@ export default function VendorDashboard() {
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-6">
-                    <h1 className="text-3xl font-bold text-gray-900">Vendor Dashboard</h1>
-                    <p className="text-gray-600 mt-1">Track your performance and sales analytics</p>
+                    <Link to={`/vendor/${vendorId}`} className="hover:underline">
+                        <h1 className="text-3xl font-bold text-gray-900">
+                            {stored?.vendor?.name || stored?.name || 'Vendor Dashboard'}
+                        </h1>
+                    </Link>
+                    <p className="text-gray-600 mt-1">
+                        {stored?.vendor?.description || stored?.description || 'Track your performance and sales analytics'}
+                    </p>
                 </div>
 
                 {/* Stats Grid */}
