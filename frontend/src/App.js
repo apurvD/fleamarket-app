@@ -11,6 +11,7 @@ import ProductDetails from "./pages/ProductDetails";
 import BoothListingPage from "./pages/BoothListingPage";
 import VendorReservationPage from "./pages/VendorReservationPage";
 import VendorRegistration from "./pages/VendorRegistration";
+import VendorOnlyRoute from "./routes/VendorOnlyRoute";
 
 function App() {
   return (
@@ -25,10 +26,23 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/register" element={<VendorRegistration />} />
           <Route path="/vendor/:id" element={<VendorDetails />} />
-          <Route path="/stats" element={<VendorDashboard />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/booths" element={<BoothListingPage />} />
-          <Route path="/reserve" element={<VendorReservationPage />} />
+
+          {/* vendor restricted routes */}
+          <Route path="/stats" element={
+              <VendorOnlyRoute>
+                <VendorDashboard />
+              </VendorOnlyRoute>
+            }
+          />
+          <Route path="/reserve"element={
+              <VendorOnlyRoute>
+                <VendorReservationPage />
+              </VendorOnlyRoute>
+            }
+          />
+
         </Routes>
         </Router>
       </VendorProvider>

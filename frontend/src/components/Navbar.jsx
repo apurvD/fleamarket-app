@@ -23,12 +23,13 @@ export default function Navbar() {
       <div className="flex space-x-6">
         <a href="/" className="hover:text-blue-600">Home</a>
         <a href="/vendors" className="hover:text-blue-600">Vendors</a>
+        <a href="/booths" className="hover:text-blue-600">Booths</a>
+
       
         {/* vendor logged in only */}
         {vendor && (
           <>
             <a href="/stats" className="hover:text-blue-600">Dashboard</a>
-            <a href="/booths" className="hover:text-blue-600">Booths</a>
             <a href="/reserve" className="hover:text-blue-600">Reserve Booth</a>
           </>
         )}
