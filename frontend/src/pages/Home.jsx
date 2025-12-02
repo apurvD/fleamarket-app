@@ -10,12 +10,12 @@ export default function Home() {
 
   useEffect(() => {
     fetchProducts();
-  }, [page, limit]);
+  }, [page, limit, search]);
 
   const fetchProducts = async () => {
     try {
       // fetch paginated products from the API endpoint
-      const res = await fetch(`http://localhost:3000/api/product?page=${page}&limit=${limit}`);
+      const res = await fetch(`http://localhost:3000/api/product?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`);
       const data = await res.json();
       // server returns { products, total }
       setProducts(data.products || []);
@@ -24,10 +24,6 @@ export default function Home() {
       console.log("Error fetching products:", error);
     }
   };
-
-  const filtered = products.filter(p =>
-    p.name?.toLowerCase().includes(search.toLowerCase())
-  );
 
   const totalPages = Math.max(1, Math.ceil(total / limit));
 
@@ -49,7 +45,10 @@ export default function Home() {
             placeholder="Search for a Product"
             className="flex-1 outline-none"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
           />
           <span className="text-gray-500 text-xl">&#128269;</span>
         </div>
@@ -97,7 +96,7 @@ export default function Home() {
           </div>
         </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-              {filtered.map((p) => (
+              {products.map((p) => (
                   <div
                       key={p.id}
                       className="bg-white p-4 rounded-xl shadow hover:shadow-lg transition"

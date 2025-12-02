@@ -432,8 +432,10 @@ routes.get('/product', (req, res) => {
   const limit = Math.max(1, parseInt(req.query.limit) || 20);
   const offset = (page - 1) * limit;
 
+  const search = `%${req.query.search}%` || '%';
+
   // first get total count
-  db.query('SELECT COUNT(*) AS total FROM product', (err, countResults) => {
+  db.query('SELECT COUNT(*) AS total FROM product WHERE name LIKE ?', [search], (err, countResults) => {
     if (err) {
       console.error('Error executing count query: ' + err.stack);
       res.status(500).send('Error fetching products');
@@ -443,7 +445,7 @@ routes.get('/product', (req, res) => {
     const total = countResults && countResults[0] ? countResults[0].total : 0;
 
     // then fetch the paginated rows
-    db.query('SELECT * FROM product LIMIT ? OFFSET ?', [limit, offset], (err, results) => {
+    db.query('SELECT * FROM product WHERE name LIKE ? LIMIT ? OFFSET ?', [search, limit, offset], (err, results) => {
       if (err) {
         console.error('Error executing paginated query: ' + err.stack);
         res.status(500).send('Error fetching products');
