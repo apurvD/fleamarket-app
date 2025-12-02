@@ -73,7 +73,7 @@ export default function BoothListingPage() {
   const scaleY = containerSize / (maxY + 5);
   const SCALE = Math.min(scaleX, scaleY);
 
-  const hours = Array.from({ length: 8 }, (_, i) => 9 + i); // market open from 9am-4pm (9-16 military time used)
+  const hours = Array.from({ length: 9 }, (_, i) => 7 + i); // market open from 7am-4pm (7-16 military time used)
 
   const hoursToRange = (hours: number[]) => {
     if (!hours || hours.length === 0) return "";
