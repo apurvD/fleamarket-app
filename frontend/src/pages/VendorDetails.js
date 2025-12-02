@@ -18,7 +18,7 @@ export default function VendorDetails() {
     const [editData, setEditData] = useState({});
     const [editMsg, setEditMsg] = useState(null);
     const [showAddProduct, setShowAddProduct] = useState(false);
-    const [newProduct, setNewProduct] = useState({ name: '', description: '', count: 0, price: 0 });
+    const [newProduct, setNewProduct] = useState({ name: '', description: '', count: '', price: '' });
     const [productMsg, setProductMsg] = useState(null);
     const [editingProductId, setEditingProductId] = useState(null);
     const [editProductData, setEditProductData] = useState({});
