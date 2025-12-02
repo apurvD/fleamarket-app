@@ -490,13 +490,23 @@ routes.get('/booth/:bid', (req, res) => {
   });
 });
 
-// get reservations for a booth
+// get reservations for a booth (optional day filter)
 routes.get('/booth/:bid/reservation', (req, res) => {
-  db.query(`SELECT * FROM reservation where bid = ${req.params["bid"]}`, (err, results) => {
+  const bid = req.params.bid;
+  const day = req.query.day;     // e.g. 2025-12-02
+
+  let query = `SELECT * FROM reservation WHERE bid = ?`;
+  const params = [bid];
+
+  if (day) {
+    query += ` AND DATE(date) = ?`;
+    params.push(day);
+  }
+
+  db.query(query, params, (err, results) => {
     if (err) {
       console.error('Error executing query: ' + err.stack);
-      res.status(500).send('Error fetching reservations');
-      return;
+      return res.status(500).send('Error fetching reservations');
     }
     res.json(results);
   });

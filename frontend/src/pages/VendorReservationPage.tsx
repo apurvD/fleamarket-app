@@ -11,92 +11,79 @@ const VendorReservationPage: React.FC = () => {
   const [startHour, setStartHour] = useState("");
   const [endHour, setEndHour] = useState("");
 
-  const vendor = JSON.parse(localStorage.getItem("vendor") || "{}");    // get logged in vendor from local storage
+  const vendor = JSON.parse(localStorage.getItem("vendor") || "{}");
   const vendorId = vendor?.vendor_id ?? null;
 
+  // load all booths
   useEffect(() => {
     const fetchBooths = async () => {
       try {
         const boothRes = await axios.get("http://localhost:3000/api/booth");
-        const boothData = boothRes.data;
-
-        const boothWithAvailability = await Promise.all(
-          boothData.map(async (b: any) => {
-            const res = await axios.get(
-              `http://localhost:3000/api/booth/${b.id}/reservation`
-            );
-
-            const reservations = res.data;
-            const reservedSlots: Record<string, any[]> = {};
-
-            reservations.forEach((r: any) => {
-              const start = new Date(r.date);
-              const day = start.toISOString().split("T")[0];
-
-              if (!reservedSlots[day]) reservedSlots[day] = [];
-              reservedSlots[day].push({
-                start: start.getHours(),
-                duration: r.duration,
-                vendorName: r.vendorName ?? "Unknown",
-              });
-            });
-
-            return { ...b, reservedSlots };
-          })
-        );
-
-        setBooths(boothWithAvailability);
+        setBooths(boothRes.data);
       } catch (err) {
         console.error("Error fetching booths:", err);
       }
     };
-
     fetchBooths();
   }, []);
 
-  const handleBoothChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  // Booth selection
+  const handleBoothChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const bid = e.target.value;
     setSelectedBooth(bid);
     setSelectedDay("");
     setStartHour("");
     setEndHour("");
 
-    const booth = booths.find((b) => b.id.toString() === bid);
-    if (!booth) return;
+    if (!bid) return;
 
-    // show next 7 days from today of booths
+    // Generate next 7 days for frontend dropdown
     const days = Array.from({ length: 7 }, (_, i) => {
       const d = new Date();
       d.setDate(d.getDate() + i);
       return d.toISOString().split("T")[0];
     });
-
     setAvailableDays(days);
   };
 
-  // updates timeslots based on start time selection and what is already reserved
-  const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  // NEW — Day filter fetches from backend using ?day=
+  const handleDayChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const day = e.target.value;
     setSelectedDay(day);
     setStartHour("");
     setEndHour("");
 
-    const booth = booths.find((b) => b.id.toString() === selectedBooth);
-    if (!booth) return;
+    if (!selectedBooth || !day) return;
+
+    let dayReservations = [];
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/api/booth/${selectedBooth}/reservation`,
+        { params: { day } }
+      );
+      dayReservations = res.data;
+    } catch (err) {
+      console.error("Error fetching filtered reservations:", err);
+    }
+
+    // Compute reserved hours
+    const reservedHours: number[] = [];
+    dayReservations.forEach((r: any) => {
+      const startHr = new Date(r.date).getHours();
+      for (let i = 0; i < r.duration; i++) {
+        reservedHours.push(startHr + i);
+      }
+    });
 
     const allSlots = Array.from({ length: 9 }, (_, i) => 7 + i);
+    const freeSlots = allSlots.filter(h => !reservedHours.includes(h));
 
-    const reserved = booth.reservedSlots[day]?.flatMap((r: any) =>
-      Array.from({ length: r.duration }, (_, i) => r.start + i)
-    ) || [];
-
-    const freeSlots = allSlots.filter((hour) => !reserved.includes(hour));
-
-    setAvailableTimes(freeSlots.map((h) => `${h}:00`));
+    setAvailableTimes(freeSlots.map(h => `${h}:00`));
   };
 
+  // Submit reservation
   const handleSubmit = async () => {
-    if (!vendorId) {    // sanity check, will probably never be hit cause this page is restricted to vendors only
+    if (!vendorId) {
       alert("You must be logged in to reserve a booth.");
       return;
     }
@@ -104,8 +91,7 @@ const VendorReservationPage: React.FC = () => {
 
     const start = parseInt(startHour);
     const end = parseInt(endHour);
-
-    if (end <= start ) {
+    if (end <= start) {
       alert("Invalid time range!");
       return;
     }
@@ -136,7 +122,6 @@ const VendorReservationPage: React.FC = () => {
         <h2 className="section-title">Booth Reservation</h2>
         <hr className="section-divider" />
 
-        {/* BOOTH SELECT */}
         <label>
           Select Booth
           <select value={selectedBooth} onChange={handleBoothChange}>
@@ -149,7 +134,6 @@ const VendorReservationPage: React.FC = () => {
           </select>
         </label>
 
-        {/* DAY SELECT */}
         <label>
           Select Day
           <select
@@ -166,7 +150,6 @@ const VendorReservationPage: React.FC = () => {
           </select>
         </label>
 
-        {/* TIME RANGE SELECT */}
         <label>
           Start Hour
           <select
@@ -191,19 +174,20 @@ const VendorReservationPage: React.FC = () => {
             disabled={!startHour}
           >
             <option value="">-- End Hour --</option>
-            {Array.from({ length: 10 }, (_, i) => 7 + i).filter((num) => {
-              for (let i = parseInt(startHour); i < num; i++) {
-                if (!availableTimes.includes(`${i}:00`)) {
-                  return false;
+            {Array.from({ length: 10 }, (_, i) => 7 + i)
+              .filter((num) => {
+                for (let i = parseInt(startHour); i < num; i++) {
+                  if (!availableTimes.includes(`${i}:00`)) {
+                    return false;
+                  }
                 }
-              }
-
-              return num > parseInt(startHour);
-            }).map((t) => (
-                    <option key={t} value={t}>
-                        {t}:00
-                    </option>
-                ))}
+                return num > parseInt(startHour);
+              })
+              .map((t) => (
+                <option key={t} value={t}>
+                  {t}:00
+                </option>
+              ))}
           </select>
         </label>
 
