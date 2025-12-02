@@ -14,57 +14,51 @@ export default function BoothListingPage() {
 
   const containerSize = 400; // map size
 
-  useEffect(() => {
-    const loadBooths = async () => {
-      try {
-        const [boothRes, vendorRes] = await Promise.all([
-          axios.get("http://localhost:3000/api/booth"),
-          axios.get("http://localhost:3000/api/vendor"),
-        ]);
+useEffect(() => {
+  const loadBooths = async () => {
+    try {
+      const [boothRes, reservationRes] = await Promise.all([
+        axios.get("http://localhost:3000/api/booth"),
+        axios.get(`http://localhost:3000/api/reservations?date=${selectedDay}`)
+      ]);
 
-        const boothsData = boothRes.data;
-        const vendorsData = vendorRes.data;
+      const boothsData = boothRes.data;
+      const reservationsData = reservationRes.data;
+      const reservedMap: Record<number, { start: number; duration: number; vendorName: string }[]> = {};
 
-        const vendorMap: Record<number, string> = {};
-        vendorsData.forEach((v: any) => {
-          vendorMap[v.id] = v.name;
+      reservationsData.forEach((r: any) => {
+        const boothId = r.bid;
+
+        const start = new Date(r.date);
+        const day = start.toISOString().split('T')[0];
+        const startHour = start.getHours();
+
+        if (!reservedMap[boothId]) reservedMap[boothId] = [];
+        reservedMap[boothId].push({
+          start: startHour,
+          duration: r.duration,
+          vendorName: r.vendor_name,
         });
+      });
 
-        const boothWithReservations = await Promise.all(
-          boothsData.map(async (b: any) => {
-            const res = await axios.get(
-              `http://localhost:3000/api/booth/${b.id}/reservation`
-            );
-            const reservations = res.data;
+      // map booths with reservations
+      const boothsWithReservations = boothsData.map((b: any) => ({
+        ...b,
+        reservedSlots: {
+          [selectedDay]: reservedMap[b.id] || []
+        }
+      }));
 
-            const reservedSlots: Record<
-              string,
-              { start: number; duration: number; vendorName: string }[]
-            > = {};
+      setBooths(boothsWithReservations);
+    } catch (err) {
+      console.error("Error loading booths:", err);
+    }
+  };
 
-            reservations.forEach((r: any) => {
-              const start = new Date(r.date);
-              const day = start.toISOString().split("T")[0];
+  loadBooths();
+}, [selectedDay]);
 
-              if (!reservedSlots[day]) reservedSlots[day] = [];
-              reservedSlots[day].push({
-                start: start.getHours(),
-                duration: r.duration,
-                vendorName: vendorMap[r.vid] || "Unknown",
-              });
-            });
 
-            return { ...b, reservedSlots };
-          })
-        );
-
-        setBooths(boothWithReservations);
-      } catch (err) {
-        console.error("Error loading booths:", err);
-      }
-    };
-    loadBooths();
-  }, []);
 
   // scale map dimensions based on booth (x,y) coordinates
   const maxX = Math.max(...booths.map((b) => b.xcor), 0);

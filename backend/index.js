@@ -490,6 +490,7 @@ routes.get('/booth/:bid', (req, res) => {
   });
 });
 
+// get reservations for a booth
 routes.get('/booth/:bid/reservation', (req, res) => {
   db.query(`SELECT * FROM reservation where bid = ${req.params["bid"]}`, (err, results) => {
     if (err) {
@@ -501,6 +502,7 @@ routes.get('/booth/:bid/reservation', (req, res) => {
   });
 });
 
+// get all reservations
 routes.get('/reservation', (req, res) => {
   db.query(`SELECT * FROM reservation`, (err, results) => {
     if (err) {
@@ -512,6 +514,7 @@ routes.get('/reservation', (req, res) => {
   });
 });
 
+// create reservation
 routes.post('/reservation', (req, res) => {
   const { vid, bid, date, duration } = req.body;
 
@@ -530,6 +533,33 @@ routes.post('/reservation', (req, res) => {
     }
 
     res.status(201).json({ message: 'Reservation created successfully', id: results.insertId });
+  });
+});
+
+// get booth reservations for day  (/api/reservations?date=YYYY-MM-DD)
+routes.get('/reservations', (req, res) => {
+  const { date } = req.query;
+
+  if (!date) {
+    res.status(400).send('Missing date parameter');
+    return;
+  }
+
+  const query = `
+    SELECT r.id, r.bid, r.vid, r.date, r.duration, v.name AS vendor_name
+    FROM reservation r
+    JOIN vendor v ON r.vid = v.id
+    WHERE DATE(r.date) = ?
+    ORDER BY r.bid, r.date 
+  `;
+
+  db.query(query, [date], (err, results) => {
+    if (err) {
+      console.error('Error executing query: ' + err.stack);
+      res.status(500).send('Error fetching reservations');
+      return;
+    }
+    res.json(results);
   });
 });
 
