@@ -42,8 +42,6 @@ export default function Navbar() {
         ) : (
           <a href="/login" className="hover:text-blue-600">Login</a>
         )}
-
-        <a href="/about" className="hover:text-blue-600">About</a>
       </div>
     </nav>
   );

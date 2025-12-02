@@ -110,7 +110,7 @@ export default function Home() {
                       </Link>
 
                       <div className="mt-2">
-                          <p> Image</p>
+                          <p className="text-gray-500"> {p.description}</p>
                           <p> Price: ${p.price}</p>
                           <p>Qty: {p.count || 0}</p>
                       </div>
@@ -137,21 +137,7 @@ export default function Home() {
           </div>
       </div>
 
-
-      {/* ---------------- FOOTER BUTTONS ---------------- */}
-      <div className="flex justify-center space-x-10 mt-16 mb-10">
-        <button className="px-6 py-2 bg-blue-400 text-white rounded-lg">
-          Browse Next Events
-        </button>
-        <button className="px-6 py-2 bg-blue-400 text-white rounded-lg">
-          Contact a Vendor
-        </button>
-        <button className="px-6 py-2 bg-blue-400 text-white rounded-lg">
-          Need Help
-        </button>
-      </div>
-
-      <footer className="text-center text-sm text-gray-600 pb-4">
+      <footer className="text-center text-sm text-gray-600 pb-4 mt-32">
         © Virginia Tech CS 5614
       </footer>
     </div>

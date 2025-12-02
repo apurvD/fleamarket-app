@@ -189,7 +189,6 @@ export default function VendorDetails() {
                     <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
                         <div className="flex justify-between items-start mb-4">
                             <h2 className="text-2xl font-semibold text-gray-800">{vendor.name || 'N/A'}</h2>
-                            <span className="bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full">Active</span>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-3">
@@ -315,10 +314,8 @@ export default function VendorDetails() {
                                 <thead>
                                 <tr className="border-b border-gray-200">
                                     <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Product Name</th>
-                                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Category</th>
                                     <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Price</th>
                                     <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Stock</th>
-                                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Condition</th>
                                     <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Actions</th>
                                 </tr>
                                 </thead>
@@ -326,20 +323,10 @@ export default function VendorDetails() {
                                 {products.map((product) => (
                                     <tr key={product.id} className="border-b border-gray-100 hover:bg-gray-50">
                                         <td className="py-3 px-4 text-gray-900">{product.name || 'N/A'}</td>
-                                        <td className="py-3 px-4 text-gray-600">{product.category || 'N/A'}</td>
                                         <td className="py-3 px-4 text-gray-900 font-medium">
                                             ${product.price ? parseFloat(product.price).toFixed(2) : '0.00'}
                                         </td>
                                         <td className="py-3 px-4 text-gray-600">{product.count || 0}</td>
-                                        <td className="py-3 px-4">
-                                                <span className={`text-xs px-2 py-1 rounded-full ${
-                                                    product.condition === 'Excellent' ? 'bg-green-100 text-green-800' :
-                                                        product.condition === 'Good' ? 'bg-blue-100 text-blue-800' :
-                                                            'bg-yellow-100 text-yellow-800'
-                                                }`}>
-                                                    {product.condition || 'N/A'}
-                                                </span>
-                                        </td>
                                         <td className="py-3 px-4">
                                             {isOwnProfile ? (
                                                 <div className="flex gap-2">

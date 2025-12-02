@@ -233,7 +233,6 @@ export default function VendorDashboard() {
                                 <tr className="border-b border-gray-200">
                                     <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Product</th>
                                     <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Date</th>
-                                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Buyer</th>
                                     <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Amount</th>
                                 </tr>
                                 </thead>
@@ -244,7 +243,6 @@ export default function VendorDashboard() {
                                         <td className="py-3 px-4 text-gray-600">
                                             {new Date(sale.date).toLocaleDateString()}
                                         </td>
-                                        <td className="py-3 px-4 text-gray-600">{sale.buyer || 'N/A'}</td>
                                         <td className="py-3 px-4 text-gray-900 font-medium">
                                             ${parseFloat(sale.amount).toFixed(2)}
                                         </td>

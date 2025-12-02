@@ -93,7 +93,7 @@ export default function ProductDetails() {
                     <div className="flex items-center text-sm text-gray-500 space-x-2">
                         <span className="hover:text-gray-700 cursor-pointer" onClick={() => navigate('/')}>Home</span>
                         <span>/</span>
-                        <span className="hover:text-gray-700 cursor-pointer">{product.category || 'Products'}</span>
+                        <span className="hover:text-gray-700 cursor-pointer">Products</span>
                         <span>/</span>
                         <span className="text-gray-900">{product.name}</span>
                     </div>
@@ -129,15 +129,8 @@ export default function ProductDetails() {
                             <div className="flex items-start justify-between mb-4">
                                 <div>
                                     <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
-                                    <p className="text-gray-600">SKU: {product.sku || product.id}</p>
+                                    <p className="text-gray-600">ID: {product.id}</p>
                                 </div>
-                                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                    product.condition === 'Excellent' ? 'bg-green-100 text-green-800' :
-                                        product.condition === 'Good' ? 'bg-blue-100 text-blue-800' :
-                                            'bg-yellow-100 text-yellow-800'
-                                }`}>
-                                    {product.condition || 'N/A'}
-                                </span>
                             </div>
 
                             <div className="flex items-baseline space-x-4 mb-6">
@@ -156,40 +149,6 @@ export default function ProductDetails() {
                                 </p>
                             </div>
 
-                            {/*<div className="grid grid-cols-2 gap-4 mb-6">
-                                <div>
-                                    <p className="text-sm text-gray-500">Category</p>
-                                    <p className="text-gray-900 font-medium">{product.category || 'N/A'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-gray-500">Dimensions</p>
-                                    <p className="text-gray-900 font-medium">{product.dimensions || 'N/A'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-gray-500">Weight</p>
-                                    <p className="text-gray-900 font-medium">{product.weight || 'N/A'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-gray-500">Date Added</p>
-                                    <p className="text-gray-900 font-medium">
-                                        {product.dateAdded ? new Date(product.dateAdded).toLocaleDateString() : 'N/A'}
-                                    </p>
-                                </div>
-                            </div>*/}
-
-                            <div className="flex space-x-4">
-                                <button className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 font-medium">
-                                    Contact Vendor
-                                </button>
-                                <button className="px-6 py-3 border-2 border-gray-300 rounded-lg hover:border-gray-400 text-gray-700 font-medium">
-                                    ♥ Save
-                                </button>
-                            </div>
-
-                            <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
-                                <span>👁️ {product.views || 0} views</span>
-                                <span>♥ {product.favorites || 0} favorites</span>
-                            </div>
                         </div>
                     </div>
                 </div>
