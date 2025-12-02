@@ -128,7 +128,7 @@ const VendorReservationPage: React.FC = () => {
             <option value="">-- Choose Booth --</option>
             {booths.map((b) => (
               <option key={b.id} value={b.id}>
-                Booth {b.id} (x:{b.xcor}, y:{b.ycor})
+                Booth {b.id}
               </option>
             ))}
           </select>

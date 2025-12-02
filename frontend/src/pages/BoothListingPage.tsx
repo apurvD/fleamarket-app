@@ -145,8 +145,8 @@ useEffect(() => {
               key={b.id}
               className={`booth-tile ${isReserved ? "reserved" : "available"}`}
               style={{
-                left: `${b.xcor * SCALE}px`,
-                top: `${b.ycor * SCALE}px`,
+                left: `${b.xcor * SCALE - 50}px`,
+                top: `${b.ycor * SCALE - 50}px`,
               }}
               title={isReserved ? "Reserved" : "Available"}
             >
