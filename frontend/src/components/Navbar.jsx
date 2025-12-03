@@ -21,26 +21,33 @@ export default function Navbar() {
       <div className="text-2xl font-bold">Fleamarket</div>
 
       <div className="flex space-x-6">
-        <a href="/" className="hover:text-blue-600">Home</a>
-        <a href="/vendors" className="hover:text-blue-600">Vendors</a>
-        <a href="/booths" className="hover:text-blue-600">Booths</a>
+        <a href="/" className="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-md 
+               hover:bg-gray-100 hover:text-gray-900 transition">Home</a>
+        <a href="/vendors" className="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-md 
+               hover:bg-gray-100 hover:text-gray-900 transition">Vendors</a>
+        <a href="/booths" className="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-md 
+               hover:bg-gray-100 hover:text-gray-900 transition">Booths</a>
 
       
         {/* vendor logged in only */}
         {vendor && (
           <>
-            <a href="/stats" className="hover:text-blue-600">Dashboard</a>
-            <a href="/reserve" className="hover:text-blue-600">Reserve Booth</a>
+            <a href="/stats" className="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-md 
+               hover:bg-gray-100 hover:text-gray-900 transition">Dashboard</a>
+            <a href="/reserve" className="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-md 
+               hover:bg-gray-100 hover:text-gray-900 transition">Reserve Booth</a>
           </>
         )}
         
         {/* dynamic login/logout selection */}
         {vendor ? (
-          <a href="/login" onClick={handleLogout} className="hover:text-blue-600">
+          <a href="/login" onClick={handleLogout} className="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-md 
+               hover:bg-gray-100 hover:text-gray-900 transition">
             Logout
           </a>
         ) : (
-          <a href="/login" className="hover:text-blue-600">Login</a>
+          <a href="/login" className="flex items-center gap-2 text-gray-700 px-3 py-2 rounded-md 
+               hover:bg-gray-100 hover:text-gray-900 transition">Login</a>
         )}
       </div>
     </nav>
