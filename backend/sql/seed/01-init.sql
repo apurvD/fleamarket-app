@@ -60,3 +60,18 @@ CREATE TABLE Reservation (
     FOREIGN KEY (bid) REFERENCES Booth(id) ON DELETE CASCADE,
     FOREIGN KEY (vid) REFERENCES Vendor(id) ON DELETE CASCADE
 );
+
+-- Product indexes: look up products by vendor, and support sorting/filtering by price
+CREATE INDEX idx_product_vid ON Product(vid);
+CREATE INDEX idx_product_price ON Product(price);
+CREATE INDEX idx_product_vid_price ON Product(vid, price);
+CREATE INDEX idx_product_name ON Product(name);
+
+-- Sale and SaleItem indexes for joins/aggregations
+CREATE INDEX idx_sale_date ON Sale(date);
+CREATE INDEX idx_saleitem_pid ON SaleItem(pid);
+CREATE INDEX idx_saleitem_sid ON SaleItem(sid);
+
+-- Reservation indexes to quickly find reservations by vendor or booth
+CREATE INDEX idx_reservation_vid ON Reservation(vid);
+CREATE INDEX idx_reservation_bid ON Reservation(bid);
