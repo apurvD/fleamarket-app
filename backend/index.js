@@ -1,7 +1,13 @@
-const express = require('express');
-const mysql = require('mysql2');
-const bcrypt = require('bcrypt');
-const bodyParser = require('body-parser');
+// const express = require('express');
+// const mysql = require('mysql2');
+// const bcrypt = require('bcrypt');
+// const bodyParser = require('body-parser');
+
+import express from 'express';
+import mysql from 'mysql2';
+import bcrypt from 'bcrypt';
+import bodyParser from 'body-parser';
+
 import dotenv from "dotenv"; 
 dotenv.config();
 
