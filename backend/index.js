@@ -2,6 +2,8 @@ const express = require('express');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
+import dotenv from "dotenv"; 
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,13 +20,20 @@ app.use((req, res, next) => {
 // Middleware
 app.use(bodyParser.json());
 
-// MySQL Connection
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'rootpass',
-  database: 'db'
+js
+import pkg from 'pg';
+const { Pool } = pkg;
+
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT || 5432,
+  ssl: { rejectUnauthorized: false } // required for Render
 });
+
+export default pool;
 
 // Connect to MySQL
 db.connect((err) => {
