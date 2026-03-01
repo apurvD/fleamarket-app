@@ -700,7 +700,18 @@ routes.get('/vendor/:vid/booth', async (req, res) => {
 });
 
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Start the server -- local development only. 
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
+
+//For production, use Supabase Edge Functions or another hosting solution.
+if(process.env.NODE_ENV === 'production') {
+  console.log('Running in production mode. Server should be started by hosting environment ');
+}
+if(process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+module.exports = app; // Export app for testing or serverless deployment
