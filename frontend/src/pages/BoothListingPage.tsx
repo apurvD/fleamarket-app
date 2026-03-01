@@ -18,8 +18,8 @@ useEffect(() => {
   const loadBooths = async () => {
     try {
       const [boothRes, reservationRes] = await Promise.all([
-        axios.get("http://localhost:3000/api/booth"),
-        axios.get(`http://localhost:3000/api/reservations?date=${selectedDay}`)
+        axios.get("/api/booth"),
+        axios.get(`/api/reservations?date=${selectedDay}`)
       ]);
 
       const boothsData = boothRes.data;

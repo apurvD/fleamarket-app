@@ -10,7 +10,7 @@ export default function VendorList() {
     const fetchVendors = async () => {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:3000/api/vendor");
+        const res = await fetch("/api/vendor");
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         setVendors(data || []);
